@@ -7,12 +7,17 @@
     
     <style>
         :root {
-            --primary-bg: #f4f7f6;
-            --card-bg: #ffffff;
+            --primary-bg: transparent;
+            --card-bg: #ffffff; /* Re-added white background to match your screenshot */
             --text-main: #2d3748;
             --text-muted: #718096;
             --accent: #4a5568;
-            --highlight: #e2e8f0;
+            --highlight: rgba(0, 0, 0, 0.08);
+            --hover-bg: rgba(0, 0, 0, 0.04);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body {
@@ -25,22 +30,21 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            box-sizing: border-box;
         }
 
         .player-card {
             background-color: var(--card-bg);
             border-radius: 24px;
             padding: 30px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            width: 90%;
-            max-width: 420px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Soft shadow for depth */
+            width: 90%; /* Scaled for smaller phones */
+            max-width: 400px; 
             display: flex;
             flex-direction: column;
         }
 
         .org-logo {
-            width: 160px; 
+            width: 190px; /* Scaled down logo */
             height: auto;
             margin-bottom: 20px;
             mix-blend-mode: multiply; 
@@ -59,22 +63,23 @@
             letter-spacing: 2px;
             font-weight: 600;
             color: var(--text-muted);
-            margin-bottom: 15px;
+            margin-bottom: 12px; 
         }
 
         .track-title {
-            font-size: 36px;
+            font-size: 28px; /* Scaled down for mobile */
             font-weight: 700;
-            margin: 0 0 25px 0;
+            margin: 0 0 20px 0; 
             color: var(--text-main);
             letter-spacing: -0.5px;
         }
 
         audio {
-            width: 90%;
-            height: 50px;
+            width: 100%; /* Forces native player to align to card edges */
+            margin: 0; 
+            display: block; 
             outline: none;
-            border-radius: 25px;
+            /* Height and border-radius removed to fix iOS grey box bug */
         }
 
         .playlist-section {
@@ -86,18 +91,19 @@
         .track-link {
             display: flex;
             align-items: center;
-            padding: 15px 12px;
+            /* 14px left padding perfectly aligns custom icon with native iOS play button */
+            padding: 12px 14px; 
             text-decoration: none;
             color: var(--text-main);
             border-radius: 14px;
             transition: background-color 0.2s ease;
-            font-size: 18px;
+            font-size: 16px; 
             font-weight: 500;
             cursor: pointer;
         }
 
         .track-link:hover, .track-link:active {
-            background-color: var(--primary-bg);
+            background-color: var(--hover-bg);
         }
 
         .play-icon {
