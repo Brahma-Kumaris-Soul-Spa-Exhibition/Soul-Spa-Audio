@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Spa Audio Guide</title>
+    
+    <style>
+        :root {
+            --primary-bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --accent: #4a5568;
+            --highlight: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .player-card {
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .org-logo {
+            width: 130px; 
+            height: auto;
+            margin-bottom: 20px;
+            mix-blend-mode: multiply; 
+        }
+
+        .now-playing-section {
+            text-align: center;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--highlight);
+            margin-bottom: 15px;
+        }
+
+        .exhibition-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .track-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0 0 25px 0;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        audio {
+            width: 100%;
+            height: 50px;
+            outline: none;
+            border-radius: 25px;
+        }
+
+        .playlist-section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .track-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            border-radius: 14px;
+            transition: background-color 0.2s ease;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .track-link:hover, .track-link:active {
+            background-color: var(--primary-bg);
+        }
+
+        .play-icon {
+            width: 28px;
+            height: 28px;
+            background-color: var(--highlight);
+            color: var(--accent);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 10px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .track-link:hover .play-icon, .track-link:active .play-icon {
+            background-color: var(--accent);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="player-card">
+        
+        <div class="now-playing-section">
+            <img src="bk-logo.jpg" alt="Brahma Kumaris UK" class="org-logo" onerror="this.style.display='none'">
+            
+            <div class="exhibition-title">Soul Spa Audio Guide</div>
+            <h1 class="track-title" id="current-title">Loading...</h1>
+            
+            <audio id="audio-player" controls controlsList="nodownload">
+                <source id="audio-source" src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div class="playlist-section" id="playlist-container">
+            <!-- The track list will dynamically populate here -->
+        </div>
+
+    </div>
+
+    <script>
+        // MASTER TRACK LIST (In exact exhibition order)
+        const tracks = [
+            { id: 'power', title: 'Power', file: 'power.mp3' },
+            { id: 'purity', title: 'Purity', file: 'purity.mp3' },
+            { id: 'happiness', title: 'Happiness', file: 'happiness.mp3' },
+            { id: 'love', title: 'Love', file: 'love.mp3' },
+            { id: 'peace', title: 'Peace', file: 'peace.mp3' },
+            { id: 'knowledge', title: 'Knowledge', file: 'knowledge.mp3' },
+            { id: 'bliss', title: 'Bliss', file: 'bliss.mp3' }
+        ];
+
+        // Function to load a track and instantly update the screen
+        function loadTrack(trackId, autoplay = false) {
+            // Find the track details, default to Power if not found
+            const currentTrack = tracks.find(t => t.id === trackId) || tracks[0];
+
+            // 1. Update the visible text on the page
+            document.getElementById('current-title').textContent = currentTrack.title;
+            document.title = `Soul Spa - ${currentTrack.title}`;
+            
+            // 2. Swap the audio file in the player
+            const audioPlayer = document.getElementById('audio-player');
+            const audioSource = document.getElementById('audio-source');
+            audioSource.src = currentTrack.file;
+            audioPlayer.load(); 
+            
+            // 3. Play automatically if they tapped it from the list
+            if (autoplay) {
+                audioPlayer.play();
+            }
+
+            // 4. Update the website URL safely (with fallback for local testing)
+            try {
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?track=' + currentTrack.id;
+                window.history.pushState({path:newUrl}, '', newUrl);
+            } catch (error) {
+                // If testing locally, this fails silently and keeps the app running perfectly
+                console.log("Running locally, URL update skipped.");
+            }
+        }
+
+        // Function to build the 7 tracks below the main player once on startup
+        function buildPlaylist() {
+            const playlistContainer = document.getElementById('playlist-container');
+            
+            tracks.forEach(track => {
+                const link = document.createElement('a');
+                link.href = `#`; 
+                link.className = 'track-link';
+                link.innerHTML = `<span class="play-icon">▶</span> ${track.title}`;
+                
+                // What happens when they tap a track in the static list:
+                link.onclick = function(e) {
+                    e.preventDefault(); 
+                    loadTrack(track.id, true); // Load it instantly and auto-play
+                };
+                
+                playlistContainer.appendChild(link);
+            });
+        }
+
+        // STARTUP: Read the URL when the page first loads
+        const urlParams = new URLSearchParams(window.location.search);
+        let initialTrackId = urlParams.get('track') || 'power';
+        
+        // Build the static menu of tracks ONCE at the very beginning
+        buildPlaylist();
+
+        // Load the correct track into the top player, but don't autoplay on initial load 
+        loadTrack(initialTrackId, false);
+        
+        // Handle the phone's "Back" button so the player updates correctly
+        window.onpopstate = function() {
+            const newParams = new URLSearchParams(window.location.search);
+            const backTrackId = newParams.get('track') || 'power';
+            loadTrack(backTrackId, false);
+        };
+    </script>
+</body>
+</html>
