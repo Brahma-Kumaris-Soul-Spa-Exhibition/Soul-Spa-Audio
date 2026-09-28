@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Hides the raw page from search engine indexing -->
+    <meta name="robots" content="noindex">
+    <!-- Simple emoji favicon to prevent 404 console errors -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
+    
     <title>Soul Spa Audio Guide</title>
     
     <style>
         :root {
             --primary-bg: transparent;
-            --card-bg: #ffffff; /* Re-added white background to match your screenshot */
+            --card-bg: #ffffff; 
             --text-main: #2d3748;
-            --text-muted: #718096;
+            --text-muted: #4a5568; /* Darkened to meet WCAG AA contrast standards */
             --accent: #4a5568;
             --highlight: rgba(0, 0, 0, 0.08);
             --hover-bg: rgba(0, 0, 0, 0.04);
+            --active-bg: rgba(74, 85, 104, 0.08); /* Soft background for currently playing track */
         }
 
         *, *::before, *::after {
@@ -29,22 +35,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            /* 100dvh prevents unwanted scrolling caused by iOS Safari's URL bar */
+            min-height: 100dvh; 
         }
 
         .player-card {
-            background-color: var(--card-bg);
-            border-radius: 24px;
-            padding: 30px 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Soft shadow for depth */
-            width: 90%; /* Scaled for smaller phones */
+            background-color: transparent; /* Allows your website background to show through */
+            padding: 20px 10px;
+            width: 85%; /* Shrunk to give breathing room on small screens */
             max-width: 400px; 
             display: flex;
             flex-direction: column;
         }
 
         .org-logo {
-            width: 190px; /* Scaled down logo */
+            width: 190px; /* Perfectly scaled to match the text below */
             height: auto;
             margin-bottom: 20px;
             mix-blend-mode: multiply; 
@@ -67,7 +72,7 @@
         }
 
         .track-title {
-            font-size: 28px; /* Scaled down for mobile */
+            font-size: 28px; 
             font-weight: 700;
             margin: 0 0 20px 0; 
             color: var(--text-main);
@@ -75,11 +80,10 @@
         }
 
         audio {
-            width: 100%; /* Forces native player to align to card edges */
+            width: 100%; /* Forces native player to align perfectly with custom track list padding */
             margin: 0; 
             display: block; 
             outline: none;
-            /* Height and border-radius removed to fix iOS grey box bug */
         }
 
         .playlist-section {
@@ -91,19 +95,36 @@
         .track-link {
             display: flex;
             align-items: center;
-            /* 14px left padding perfectly aligns custom icon with native iOS play button */
-            padding: 12px 14px; 
-            text-decoration: none;
+            padding: 12px 14px; /* 14px aligns our circle with the iOS play button */
             color: var(--text-main);
             border-radius: 14px;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
             font-size: 16px; 
             font-weight: 500;
             cursor: pointer;
+            
+            /* Resetting default <button> styles */
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
         }
 
         .track-link:hover, .track-link:active {
             background-color: var(--hover-bg);
+        }
+
+        /* Accessibility: Outline for keyboard navigation */
+        .track-link:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+        }
+
+        /* Highlights the currently playing track */
+        .track-link.active {
+            background-color: var(--active-bg);
+            font-weight: 700;
         }
 
         .play-icon {
@@ -121,7 +142,7 @@
             transition: all 0.2s ease;
         }
 
-        .track-link:hover .play-icon, .track-link:active .play-icon {
+        .track-link:hover .play-icon, .track-link:active .play-icon, .track-link.active .play-icon {
             background-color: var(--accent);
             color: white;
         }
@@ -137,7 +158,8 @@
             <div class="exhibition-title">Soul Spa Audio Guide</div>
             <h1 class="track-title" id="current-title">Loading...</h1>
             
-            <audio id="audio-player" controls controlsList="nodownload">
+            <!-- preload="metadata" saves mobile data by only loading track lengths, not full files until played -->
+            <audio id="audio-player" controls controlsList="nodownload" preload="metadata">
                 <source id="audio-source" src="" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
@@ -161,71 +183,87 @@
             { id: 'bliss', title: 'Bliss', file: 'bliss.mp3' }
         ];
 
-        // Function to load a track and instantly update the screen
-        function loadTrack(trackId, autoplay = false) {
-            // Find the track details, default to Power if not found
+        // Function to load a track, update UI, and manage browser history safely
+        function loadTrack(trackId, autoplay = false, history_mode = 'none') {
             const currentTrack = tracks.find(t => t.id === trackId) || tracks[0];
 
-            // 1. Update the visible text on the page
+            // 1. Update text
             document.getElementById('current-title').textContent = currentTrack.title;
             document.title = `Soul Spa - ${currentTrack.title}`;
             
-            // 2. Swap the audio file in the player
+            // 2. Load audio
             const audioPlayer = document.getElementById('audio-player');
             const audioSource = document.getElementById('audio-source');
             audioSource.src = currentTrack.file;
             audioPlayer.load(); 
             
-            // 3. Play automatically if they tapped it from the list
+            // 3. Autoplay (with catch for mobile browser blocking rules)
             if (autoplay) {
-                audioPlayer.play();
+                audioPlayer.play().catch(() => {});
             }
 
-            // 4. Update the website URL safely (with fallback for local testing)
-            try {
-                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?track=' + currentTrack.id;
-                window.history.pushState({path:newUrl}, '', newUrl);
-            } catch (error) {
-                // If testing locally, this fails silently and keeps the app running perfectly
-                console.log("Running locally, URL update skipped.");
+            // 4. Update the "Active" styling in the playlist
+            document.querySelectorAll('.track-link').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.id === currentTrack.id) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // 5. Update mobile Lock-Screen metadata (iOS/Android)
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: currentTrack.title,
+                    artist: 'Brahma Kumaris UK',
+                    album: 'Soul Spa Audio Guide'
+                });
+            }
+
+            // 6. Manage browser history specifically so the "Back" button doesn't get trapped
+            if (history_mode !== 'none') {
+                try {
+                    const newUrl = window.location.pathname + '?track=' + currentTrack.id;
+                    // 'pushState' creates a new back button entry, 'replaceState' overwrites the current one
+                    window.history[history_mode === 'push' ? 'pushState' : 'replaceState']({}, '', newUrl);
+                } catch (error) {
+                    console.log("Running locally, URL update skipped.");
+                }
             }
         }
 
-        // Function to build the 7 tracks below the main player once on startup
+        // Function to build semantic <button> elements for accessibility
         function buildPlaylist() {
             const playlistContainer = document.getElementById('playlist-container');
             
             tracks.forEach(track => {
-                const link = document.createElement('a');
-                link.href = `#`; 
-                link.className = 'track-link';
-                link.innerHTML = `<span class="play-icon">▶</span> ${track.title}`;
+                const btn = document.createElement('button');
+                btn.className = 'track-link';
+                btn.dataset.id = track.id; // Store ID for active state highlighting
+                btn.innerHTML = `<span class="play-icon">▶</span> ${track.title}`;
                 
-                // What happens when they tap a track in the static list:
-                link.onclick = function(e) {
-                    e.preventDefault(); 
-                    loadTrack(track.id, true); // Load it instantly and auto-play
+                // User taps a track -> 'push' to history so they can use the back button
+                btn.onclick = function() {
+                    loadTrack(track.id, true, 'push'); 
                 };
                 
-                playlistContainer.appendChild(link);
+                playlistContainer.appendChild(btn);
             });
         }
 
-        // STARTUP: Read the URL when the page first loads
+        // STARTUP LOGIC
         const urlParams = new URLSearchParams(window.location.search);
         let initialTrackId = urlParams.get('track') || 'power';
         
-        // Build the static menu of tracks ONCE at the very beginning
         buildPlaylist();
-
-        // Load the correct track into the top player, but don't autoplay on initial load 
-        loadTrack(initialTrackId, false);
         
-        // Handle the phone's "Back" button so the player updates correctly
+        // Initial load -> 'replace' history to clean up messy URLs without breaking the back button
+        loadTrack(initialTrackId, false, 'replace');
+        
+        // User presses the physical phone "Back" button -> 'none' so we don't trap them in a loop
         window.onpopstate = function() {
             const newParams = new URLSearchParams(window.location.search);
             const backTrackId = newParams.get('track') || 'power';
-            loadTrack(backTrackId, false);
+            loadTrack(backTrackId, false, 'none');
         };
     </script>
 </body>
