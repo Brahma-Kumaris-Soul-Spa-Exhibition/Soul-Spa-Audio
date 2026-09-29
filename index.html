@@ -214,9 +214,25 @@
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            font-size: 10px;
             flex-shrink: 0;
             transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        /* Play and pause are drawn with CSS shapes on whole-pixel sizes,
+           so they render identically on iOS, Android and desktop. */
+        .play-icon::before {
+            content: "";
+            width: 8px;
+            height: 10px;
+            margin-left: 1px;
+            background: currentColor;
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+        }
+
+        .play-icon.is-playing::before {
+            margin-left: 0;
+            clip-path: none;
+            background: linear-gradient(to right, currentColor 0 3px, transparent 3px 5px, currentColor 5px 8px);
         }
 
         .track-link:active .play-icon,
@@ -326,7 +342,7 @@
         // Add transcript text per track. Separate paragraphs with a blank line.
         // Audio-only content needs a text alternative (WCAG 1.2.1, Level A).
         const tracks = [
-            { id: 'power',     title: 'Power',     file: 'power.mp3',     transcript: 'Transcript coming soon' },
+            { id: 'power',     title: 'Power',     file: 'power.mp3',     transcript: '' },
             { id: 'purity',    title: 'Purity',    file: 'purity.mp3',    transcript: '' },
             { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', transcript: '' },
             { id: 'love',      title: 'Love',      file: 'love.mp3',      transcript: '' },
@@ -357,7 +373,7 @@
                 } else {
                     btn.removeAttribute('aria-current');
                 }
-                btn.querySelector('.play-icon').textContent = (isActive && playing ? '❚❚' : '▶') + '\uFE0E';
+                btn.querySelector('.play-icon').classList.toggle('is-playing', isActive && playing);
                 btn.setAttribute('aria-label', `${isActive && playing ? 'Pause' : 'Play'} ${title}`);
             });
         }
