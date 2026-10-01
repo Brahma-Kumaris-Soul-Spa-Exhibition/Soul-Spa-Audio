@@ -9,7 +9,7 @@ const tracks = [
     // Purity: orange, solid drop with crescent highlight
     { id: 'purity', title: 'Purity', file: 'purity.mp3', color: '#E06221', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor" stroke="none"></path><path d="M8 13.2A5.2 5.2 0 0 0 11.8 18.6 4 4 0 0 1 8 13.2z" fill="#E06221" stroke="none"></path>') },
     // Happiness: yellow, solid star
-    { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#F8B617', fg: '#fff', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#ffffff" stroke="none"></polygon>') },
+    { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#F8B617', fg: '#fff', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#ffffff" stroke="ffffff"></polygon>') },
     // Love: green, heart outline
     { id: 'love', title: 'Love', file: 'love.mp3', color: '#006E3A', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="3"></path>') },
     // Peace: blue, three waves
