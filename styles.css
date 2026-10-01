@@ -62,7 +62,7 @@ body {
 
 audio { width: 100%; margin: 0; display: block; outline: none; border: none; background-color: transparent; }
 
-.safety-note { font-size: 13px; color: var(--text-muted); margin: 12px 0 0; line-height: 1.5; }
+.safety-note { font-size: 13px; color: var(--text-muted); margin: 12px auto 0; line-height: 1.5; max-width: 30ch; text-wrap: balance; }
 
 #audio-error { color: var(--error); font-size: 14px; margin: 10px 0 0; }
 

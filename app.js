@@ -112,11 +112,9 @@ function buildPlaylist() {
 
         const symbol = document.createElement('div');
         symbol.className = 'track-symbol';
-        
-        // This is the crucial fix! Applying the color property directly 
-        // forces the SVGs to inherit white, ignoring dark mode CSS overrides.
-        symbol.style.color = track.fg;
-        symbol.style.setProperty('--tint', track.color);
+        symbol.style.setProperty('--ink-light', track.fg);
+            symbol.style.setProperty('--ink-dark', track.fg);
+            symbol.style.setProperty('--tint', track.color);
         symbol.innerHTML = track.icon; // hardcoded constants only
 
         const label = document.createElement('span');
