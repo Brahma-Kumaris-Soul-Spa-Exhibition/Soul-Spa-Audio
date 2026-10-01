@@ -7,13 +7,13 @@ const tracks = [
     // Power: red, solid sun with 12 rays
     { id: 'power', title: 'Power', file: 'power.mp3', color: '#BA2025', fg: '#fff', transcript: '', icon: svgWrapper('<circle cx="12" cy="12" r="5" fill="currentColor" stroke="none"></circle><path d="M12.00 4.00L12.00 1.40M16.00 5.07L17.30 2.82M18.93 8.00L21.18 6.70M20.00 12.00L22.60 12.00M18.93 16.00L21.18 17.30M16.00 18.93L17.30 21.18M12.00 20.00L12.00 22.60M8.00 18.93L6.70 21.18M5.07 16.00L2.82 17.30M4.00 12.00L1.40 12.00M5.07 8.00L2.82 6.70M8.00 5.07L6.70 2.82" stroke-width="2"></path>') },
     // Purity: orange, solid drop with crescent highlight
-    { id: 'purity', title: 'Purity', file: 'purity.mp3', color: '#E06221', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor" stroke="none"></path><path d="M8 13.2A5.2 5.2 0 0 0 11.8 18.6 4 4 0 0 1 8 13.2z" fill="#E06221" stroke="none"></path>') },
+    { id: 'purity', title: 'Purity', file: 'purity.mp3', color: '#E06221', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor" stroke="none"></path><path d="M7.6 12.6A5.6 5.6 0 0 0 12 19.3 9 9 0 0 1 7.6 12.6z" fill="#E06221" stroke="none"></path>') },
     // Happiness: yellow, solid star
     { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#F8B617', fg: '#fff', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none"></polygon>') },
     // Love: green, heart outline
     { id: 'love', title: 'Love', file: 'love.mp3', color: '#006E3A', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="3"></path>') },
     // Peace: blue, three waves
-    { id: 'peace', title: 'Peace', file: 'peace.mp3', color: '#0075BE', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M3 7q2-2 4 0t4 0 4 0 4 0M3 12q2-2 4 0t4 0 4 0 4 0M3 17q2-2 4 0t4 0 4 0 4 0"></path>') },
+    { id: 'peace', title: 'Peace', file: 'peace.mp3', color: '#0075BE', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M3 6.5q2-1.8 4 0t4 0 4 0 4 0M3 12q2-1.8 4 0t4 0 4 0 4 0M3 17.5q2-1.8 4 0t4 0 4 0 4 0" stroke-width="2"></path>') },
     // Knowledge: indigo, light bulb with rays
     { id: 'knowledge', title: 'Knowledge', file: 'knowledge.mp3', color: '#27387A', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M9.2 17.5C9.2 15 6.8 14 6.8 10.5a5.2 5.2 0 0 1 10.4 0c0 3.5-2.4 4.5-2.4 7zM9.5 21h5M12 1v1.8M3.6 4.6l1.3 1.3M20.4 4.6l-1.3 1.3M1.5 10.5h1.8M20.7 10.5h1.8" stroke-width="2"></path>') },
     // Bliss: purple, lotus
