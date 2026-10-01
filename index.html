@@ -7,13 +7,149 @@
     <meta name="referrer" content="no-referrer">
     <meta name="color-scheme" content="light dark">
 
-    <!-- CSP: only same-origin files. No inline code, so styles.css and app.js can be edited freely. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; media-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+    <!-- CSP: blocks all external loads. Inline code is allowed so this single file stays easy to edit. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; media-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
 
     <title>Soul Spa Guided Meditations</title>
 
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Animatable glow channels (browsers without @property just switch instantly) */
+        @property --glow-r { syntax: '<number>'; inherits: true; initial-value: 74; }
+        @property --glow-g { syntax: '<number>'; inherits: true; initial-value: 85; }
+        @property --glow-b { syntax: '<number>'; inherits: true; initial-value: 104; }
+
+        :root {
+            color-scheme: light dark;
+            --text-main: #2d3748;   /* 10.6:1 on white */
+            --text-muted: #4a5568;  /* 7.5:1 on white */
+            --accent-contrast: #fff;
+            --error: #c53030;       /* 5.5:1 on white */
+            --highlight: rgba(0, 0, 0, 0.08);
+            --hover-bg: rgba(0, 0, 0, 0.04);
+            --active-bg: rgba(0, 0, 0, 0.07);
+            --accent: #4a5568;      /* decorative only: never used for text */
+            --glow-alpha: 0.15;
+            transition: --glow-r 1s ease, --glow-g 1s ease, --glow-b 1s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-main: #edf2f7;
+                --text-muted: #cbd5e0;
+                --accent-contrast: #1a202c;
+                --error: #fc8181;
+                --highlight: rgba(255, 255, 255, 0.14);
+                --hover-bg: rgba(255, 255, 255, 0.08);
+                --active-bg: rgba(255, 255, 255, 0.14);
+                --glow-alpha: 0.25;
+            }
+            .org-logo { mix-blend-mode: normal; background: #fff; padding: 8px; border-radius: 8px; }
+            .track-symbol { color: var(--ink-dark); }
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background-color: transparent;
+            background-image: radial-gradient(circle at 50% 0%, rgb(var(--glow-r) var(--glow-g) var(--glow-b) / var(--glow-alpha)) 0%, transparent 70%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .player-card { padding: 20px 15px; width: 100%; max-width: 420px; display: flex; flex-direction: column; }
+
+        .org-logo { display: block; margin: 0 auto 20px; width: 190px; max-width: 100%; height: auto; mix-blend-mode: multiply; }
+
+        .now-playing-section { text-align: center; padding-bottom: 25px; border-bottom: 1px solid var(--highlight); margin-bottom: 15px; }
+
+        .page-title { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; color: var(--text-muted); margin: 0 0 12px; }
+
+        .track-title { font-size: 28px; font-weight: 700; margin: 0 0 20px; letter-spacing: -0.5px; }
+
+        audio { width: 100%; margin: 0; display: block; outline: none; border: none; background-color: transparent; }
+
+        .safety-note { font-size: 13px; color: var(--text-muted); margin: 12px auto 0; line-height: 1.5; max-width: 30ch; text-wrap: balance; }
+
+        #audio-error { color: var(--error); font-size: 14px; margin: 10px 0 0; }
+
+        #transcript {
+            margin-top: 15px; text-align: left; background: var(--hover-bg);
+            padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent);
+            font-size: 14px; line-height: 1.6;
+        }
+        #transcript summary { cursor: pointer; font-weight: 600; color: var(--text-main); }
+
+        #transcript summary:focus-visible,
+        .privacy-footer a:focus-visible,
+        .track-link:focus-visible { outline: 2px solid var(--text-main); outline-offset: 2px; }
+
+        #transcript-body { margin-top: 10px; }
+        #transcript-body p { margin-top: 0; margin-bottom: 12px; }
+        #transcript-body p:last-child { margin-bottom: 0; }
+
+        .playlist-section { display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0; }
+
+        .track-link {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 14px; color: var(--text-main); border-radius: 14px;
+            transition: background-color 0.2s ease; cursor: pointer;
+            background: transparent; border: none; width: 100%; text-align: left; font-family: inherit;
+        }
+
+        .track-left-content { display: flex; align-items: center; gap: 15px; }
+        .track-title-text { font-size: 16px; font-weight: 500; }
+
+        .track-symbol {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            color: var(--ink-light);              /* dark shade on light mode, bright shade on dark mode */
+            background-color: var(--tint);
+        }
+
+        .play-indicator {
+            width: 28px; height: 28px;
+            background-color: var(--highlight); color: var(--text-main);
+            border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.2s ease; opacity: 0;
+        }
+        .play-indicator::before { content: ""; width: 8px; height: 10px; margin-left: 1px; background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+        .play-indicator.is-playing::before { margin-left: 0; clip-path: none; background: linear-gradient(to right, currentColor 0 3px, transparent 3px 5px, currentColor 5px 8px); }
+
+        @media (hover: hover) {
+            .track-link:hover { background-color: var(--hover-bg); }
+            .track-link:hover .play-indicator { opacity: 1; }
+        }
+        .track-link:active { background-color: var(--hover-bg); }
+        .track-link.active { background-color: var(--active-bg); }
+        .track-link.active .track-title-text { font-weight: 700; }
+        .track-link.active .play-indicator { opacity: 1; background-color: var(--text-main); color: var(--accent-contrast); }
+
+        .privacy-footer { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--highlight); font-size: 12px; color: var(--text-muted); text-align: center; line-height: 1.5; }
+        .privacy-footer p { margin: 0; }
+        .privacy-footer a { color: var(--text-main); text-decoration: underline; }
+        .privacy-footer .charity-details { margin-top: 12px; text-wrap: balance; }
+        .noscript { text-align: center; padding: 20px; font-size: 14px; }
+        .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+        @media (forced-colors: active) {
+            .track-link.active { outline: 2px solid Highlight; }
+            .track-symbol { forced-color-adjust: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            :root, .track-link, .play-indicator { transition: none; }
+        }
+    </style>
 </head>
 <body>
     <noscript><p class="noscript">Please enable JavaScript to use the audio guide.</p></noscript>
@@ -56,6 +192,166 @@
         </footer>
     </main>
 
-    <script src="app.js"></script>
+    <script>
+        'use strict';
+
+        const svgWrapper = (path) => `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+
+        // color = bright shade (glow, dark mode). ink = darker shade for light mode (all >= 4.5:1 on white).
+        const tracks = [
+            { id: 'power',     title: 'Power',     file: 'power.mp3',     color: '#e53e3e', ink: '#c53030', transcript: '', icon: svgWrapper('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>') },
+            { id: 'purity',    title: 'Purity',    file: 'purity.mp3',    color: '#ed8936', ink: '#9c4221', transcript: '', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>') },
+            { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#ecc94b', ink: '#8a5a00', transcript: '', icon: svgWrapper('<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>') },
+            { id: 'love',      title: 'Love',      file: 'love.mp3',      color: '#48bb78', ink: '#276749', transcript: '', icon: svgWrapper('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>') },
+            { id: 'peace',     title: 'Peace',     file: 'peace.mp3',     color: '#4299e1', ink: '#2b6cb0', transcript: '', icon: svgWrapper('<path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>') },
+            { id: 'knowledge', title: 'Knowledge', file: 'knowledge.mp3', color: '#667eea', ink: '#4c51bf', transcript: '', icon: svgWrapper('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>') },
+            { id: 'bliss',     title: 'Bliss',     file: 'bliss.mp3',     color: '#9f7aea', ink: '#6b46c1', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>') }
+        ];
+
+        const player = document.getElementById('audio-player');
+        const source = document.getElementById('audio-source');
+        const titleEl = document.getElementById('current-title');
+        const list = document.getElementById('playlist-container');
+        const errorEl = document.getElementById('audio-error');
+        const transcriptEl = document.getElementById('transcript');
+        const transcriptBody = document.getElementById('transcript-body');
+        const logo = document.getElementById('org-logo');
+        const root = document.documentElement;
+
+        let currentIndex = 0;
+
+        function hexToChannels(hex) {
+            const n = parseInt(hex.replace('#', ''), 16);
+            return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+        }
+
+        function updateButtons() {
+            const playing = !player.paused;
+            list.querySelectorAll('.track-link').forEach((btn, i) => {
+                const isActive = i === currentIndex;
+                btn.classList.toggle('active', isActive);
+                if (isActive) btn.setAttribute('aria-current', 'true');
+                else btn.removeAttribute('aria-current');
+                btn.querySelector('.play-indicator').classList.toggle('is-playing', isActive && playing);
+                btn.setAttribute('aria-label', `${isActive && playing ? 'Pause' : 'Play'} ${tracks[i].title}`);
+            });
+        }
+
+        function renderTranscript(text) {
+            transcriptBody.replaceChildren();
+            if (!text) { transcriptEl.hidden = true; return; }
+            text.split(/\n\s*\n/).forEach(para => {
+                const p = document.createElement('p');
+                p.textContent = para.trim();
+                transcriptBody.appendChild(p);
+            });
+            transcriptEl.open = false;
+            transcriptEl.hidden = false;
+        }
+
+        function loadTrack(index, autoplay = false) {
+            currentIndex = index;
+            const track = tracks[index];
+            const [r, g, b] = hexToChannels(track.color);
+
+            titleEl.textContent = track.title;
+            document.title = `Soul Spa - ${track.title}`;
+
+            root.style.setProperty('--accent', track.color);
+            root.style.setProperty('--glow-r', r);
+            root.style.setProperty('--glow-g', g);
+            root.style.setProperty('--glow-b', b);
+
+            errorEl.hidden = true;
+            source.src = track.file;
+            player.load();
+            if (autoplay) player.play().catch(() => {});
+
+            renderTranscript(track.transcript);
+            updateButtons();
+
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: track.title,
+                    artist: 'Brahma Kumaris UK',
+                    album: 'Soul Spa Guided Meditations'
+                });
+            }
+
+            try {
+                history.replaceState({}, '', `${location.pathname}?track=${track.id}`);
+            } catch (e) { /* Running locally: URL update skipped. */ }
+        }
+
+        function step(offset) {
+            loadTrack((currentIndex + offset + tracks.length) % tracks.length, true);
+        }
+
+        function buildPlaylist() {
+            tracks.forEach((track, index) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'track-link';
+
+                const leftContent = document.createElement('div');
+                leftContent.className = 'track-left-content';
+
+                const symbol = document.createElement('div');
+                symbol.className = 'track-symbol';
+                symbol.style.setProperty('--ink-light', track.ink);
+                symbol.style.setProperty('--ink-dark', track.color);
+                symbol.style.setProperty('--tint', `rgba(${hexToChannels(track.color).join(', ')}, 0.15)`);
+                symbol.innerHTML = track.icon; // hardcoded constants only
+
+                const label = document.createElement('span');
+                label.className = 'track-title-text';
+                label.textContent = track.title;
+
+                leftContent.append(symbol, label);
+
+                const playIndicator = document.createElement('span');
+                playIndicator.className = 'play-indicator';
+                playIndicator.setAttribute('aria-hidden', 'true');
+
+                btn.append(leftContent, playIndicator);
+                btn.addEventListener('click', () => {
+                    if (index === currentIndex) {
+                        if (player.paused) player.play().catch(() => {});
+                        else player.pause();
+                    } else {
+                        loadTrack(index, true);
+                    }
+                });
+
+                li.appendChild(btn);
+                list.appendChild(li);
+            });
+        }
+
+        const showError = () => { errorEl.hidden = false; };
+        source.addEventListener('error', showError);
+        player.addEventListener('error', showError);   // mid-playback network/decode failures
+        player.addEventListener('play', updateButtons);
+        player.addEventListener('pause', updateButtons);
+        player.addEventListener('ended', updateButtons);
+
+        // Logo: handle failures that happened before this script ran
+        if (logo.complete && logo.naturalWidth === 0) logo.hidden = true;
+        logo.addEventListener('error', () => { logo.hidden = true; });
+
+        if ('mediaSession' in navigator) {
+            try {
+                navigator.mediaSession.setActionHandler('previoustrack', () => step(-1));
+                navigator.mediaSession.setActionHandler('nexttrack', () => step(1));
+            } catch (e) { }
+        }
+
+        const requested = new URLSearchParams(location.search).get('track');
+        const startIndex = Math.max(0, tracks.findIndex(t => t.id === requested));
+
+        buildPlaylist();
+        loadTrack(startIndex, false);
+    </script>
 </body>
 </html>
