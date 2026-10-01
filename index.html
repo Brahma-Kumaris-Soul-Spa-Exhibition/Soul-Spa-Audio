@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
     <meta name="color-scheme" content="light dark">
-    <!-- GitHub Pages can't set headers, so the CSP is a meta tag. It blocks all third-party loads.
-         'unsafe-inline' is needed only because CSS and JS live in this single file. -->
+    
+    <!-- GitHub Pages CSP. Blocks third-party loads for security. -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; media-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
 
@@ -17,21 +17,20 @@
             color-scheme: light dark;
             --text-main: #2d3748;
             --text-muted: #4a5568;
-            --accent: #4a5568;
+            --accent: #4a5568; 
             --accent-contrast: #fff;
             --error: #c53030;
             --highlight: rgba(0, 0, 0, 0.08);
             --hover-bg: rgba(0, 0, 0, 0.04);
             --active-bg: rgba(74, 85, 104, 0.08);
+            /* This RGB variable creates our ambient background glow */
+            --glow-rgb: 74, 85, 104; 
         }
 
-        /* The background stays transparent so the page suits wherever it is embedded.
-           Test in the real embed against the host page's background. */
         @media (prefers-color-scheme: dark) {
             :root {
                 --text-main: #edf2f7;
                 --text-muted: #cbd5e0;
-                --accent: #cbd5e0;
                 --accent-contrast: #1a202c;
                 --error: #fc8181;
                 --highlight: rgba(255, 255, 255, 0.14);
@@ -52,7 +51,6 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: transparent;
             color: var(--text-main);
             margin: 0;
             padding: 20px;
@@ -61,6 +59,19 @@
             align-items: center;
             min-height: 100vh;
             min-height: 100dvh;
+            
+            /* The Ambient Glow Background */
+            background-color: transparent;
+            background-image: radial-gradient(circle at 50% 0%, rgba(var(--glow-rgb), 0.15) 0%, transparent 70%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            transition: background-image 1s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-image: radial-gradient(circle at 50% 0%, rgba(var(--glow-rgb), 0.25) 0%, transparent 70%);
+            }
         }
 
         .player-card {
@@ -133,10 +144,12 @@
             cursor: pointer;
             font-weight: 600;
             color: var(--accent);
+            transition: color 0.3s ease;
         }
 
         #transcript summary:focus-visible,
-        .privacy-footer a:focus-visible {
+        .privacy-footer a:focus-visible,
+        .track-link:focus-visible {
             outline: 2px solid var(--accent);
             outline-offset: 2px;
         }
@@ -157,7 +170,7 @@
         .playlist-section {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
             list-style: none;
             padding: 0;
             margin: 0;
@@ -166,12 +179,11 @@
         .track-link {
             display: flex;
             align-items: center;
-            padding: 12px 14px;
+            justify-content: space-between;
+            padding: 10px 14px;
             color: var(--text-main);
             border-radius: 14px;
             transition: background-color 0.2s ease;
-            font-size: 16px;
-            font-weight: 500;
             cursor: pointer;
             background: transparent;
             border: none;
@@ -180,31 +192,29 @@
             font-family: inherit;
         }
 
-        @media (hover: hover) {
-            .track-link:hover {
-                background-color: var(--hover-bg);
-            }
-            .track-link:hover .play-icon {
-                background-color: var(--accent);
-                color: var(--accent-contrast);
-            }
+        .track-left-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .track-link:active {
-            background-color: var(--hover-bg);
+        .track-title-text {
+            font-size: 16px;
+            font-weight: 500;
         }
 
-        .track-link:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: -2px;
+        .track-symbol {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            /* Colors are injected via inline styles in JS */
         }
 
-        .track-link.active {
-            background-color: var(--active-bg);
-            font-weight: 700;
-        }
-
-        .play-icon {
+        .play-indicator {
             width: 28px;
             height: 28px;
             background-color: var(--highlight);
@@ -213,14 +223,14 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
+            font-size: 10px;
             flex-shrink: 0;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            transition: all 0.2s ease;
+            opacity: 0; /* Hidden by default until hovered or active */
         }
 
-        /* Play and pause are drawn with CSS shapes on whole-pixel sizes,
-           so they render identically on iOS, Android and desktop. */
-        .play-icon::before {
+        /* Play/Pause CSS shapes */
+        .play-indicator::before {
             content: "";
             width: 8px;
             height: 10px;
@@ -229,14 +239,35 @@
             clip-path: polygon(0 0, 100% 50%, 0 100%);
         }
 
-        .play-icon.is-playing::before {
+        .play-indicator.is-playing::before {
             margin-left: 0;
             clip-path: none;
             background: linear-gradient(to right, currentColor 0 3px, transparent 3px 5px, currentColor 5px 8px);
         }
 
-        .track-link:active .play-icon,
-        .track-link.active .play-icon {
+        @media (hover: hover) {
+            .track-link:hover {
+                background-color: var(--hover-bg);
+            }
+            .track-link:hover .play-indicator {
+                opacity: 1;
+            }
+        }
+
+        .track-link:active {
+            background-color: var(--hover-bg);
+        }
+
+        .track-link.active {
+            background-color: var(--active-bg);
+        }
+
+        .track-link.active .track-title-text {
+            font-weight: 700;
+        }
+
+        .track-link.active .play-indicator {
+            opacity: 1;
             background-color: var(--accent);
             color: var(--accent-contrast);
         }
@@ -251,43 +282,14 @@
             line-height: 1.5;
         }
 
-        .privacy-footer p {
-            margin: 0;
-        }
-
-        .privacy-footer a {
-            color: var(--accent);
-            text-decoration: underline;
-        }
-
-        .privacy-footer .charity-details {
-            margin-top: 15px;
-            text-wrap: balance;
-        }
-
-        .noscript {
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-        }
-
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            margin: -1px;
-            padding: 0;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
+        .privacy-footer p { margin: 0; }
+        .privacy-footer a { color: var(--accent); text-decoration: underline; }
+        .privacy-footer .charity-details { margin-top: 15px; text-wrap: balance; }
+        .noscript { text-align: center; padding: 20px; font-size: 14px; }
+        .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
         @media (prefers-reduced-motion: reduce) {
-            .track-link,
-            .play-icon {
-                transition: none;
-            }
+            body, .track-link, .play-indicator, #transcript summary { transition: none; }
         }
     </style>
 </head>
@@ -295,9 +297,7 @@
     <noscript><p class="noscript">Please enable JavaScript to use the audio guide.</p></noscript>
 
     <main class="player-card">
-
         <section class="now-playing-section" aria-labelledby="current-title">
-            <!-- Set width and height to the logo's real pixel dimensions to prevent layout shift. -->
             <img src="bk-logo.jpg" alt="Brahma Kumaris UK" class="org-logo" id="org-logo" width="190" height="80">
 
             <p class="exhibition-title">Soul Spa Guided Meditations</p>
@@ -329,26 +329,32 @@
 
             <p class="charity-details">
                 Brahma Kumaris, UK is a registered Charity in England &amp; Wales (269971) and Scotland&nbsp;(SC040512)<br>
-                <!-- If the charity is also a registered company, add its company number and place of registration here. -->
                 Registered Office: 65-69 Pound Lane, London NW10 2HH
             </p>
         </footer>
-
     </main>
 
     <script>
         'use strict';
 
-        // Add transcript text per track. Separate paragraphs with a blank line.
-        // Audio-only content needs a text alternative (WCAG 1.2.1, Level A).
+        // Helper to wrap SVG paths in a consistent 24x24 canvas
+        const svgWrapper = (path) => `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+
         const tracks = [
-            { id: 'power',     title: 'Power',     file: 'power.mp3',     transcript: '' },
-            { id: 'purity',    title: 'Purity',    file: 'purity.mp3',    transcript: '' },
-            { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', transcript: '' },
-            { id: 'love',      title: 'Love',      file: 'love.mp3',      transcript: '' },
-            { id: 'peace',     title: 'Peace',     file: 'peace.mp3',     transcript: '' },
-            { id: 'knowledge', title: 'Knowledge', file: 'knowledge.mp3', transcript: '' },
-            { id: 'bliss',     title: 'Bliss',     file: 'bliss.mp3',     transcript: '' }
+            // Power: Lightning Bolt
+            { id: 'power',     title: 'Power',     file: 'power.mp3',     color: '#e53e3e', transcript: '', icon: svgWrapper('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>') },
+            // Purity: Water Droplet
+            { id: 'purity',    title: 'Purity',    file: 'purity.mp3',    color: '#ed8936', transcript: '', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>') },
+            // Happiness: Sun
+            { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#ecc94b', transcript: '', icon: svgWrapper('<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>') },
+            // Love: Heart
+            { id: 'love',      title: 'Love',      file: 'love.mp3',      color: '#48bb78', transcript: '', icon: svgWrapper('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>') },
+            // Peace: Gentle Wind
+            { id: 'peace',     title: 'Peace',     file: 'peace.mp3',     color: '#4299e1', transcript: '', icon: svgWrapper('<path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>') },
+            // Knowledge: Open Book
+            { id: 'knowledge', title: 'Knowledge', file: 'knowledge.mp3', color: '#667eea', transcript: '', icon: svgWrapper('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>') },
+            // Bliss: Star
+            { id: 'bliss',     title: 'Bliss',     file: 'bliss.mp3',     color: '#9f7aea', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>') }
         ];
 
         const player = document.getElementById('audio-player');
@@ -362,6 +368,12 @@
 
         let currentIndex = 0;
 
+        // Helper to convert hex colors to rgb for the transparent background glow
+        function hexToRgb(hex) {
+            const bigint = parseInt(hex.replace('#', ''), 16);
+            return `${(bigint >> 16) & 255}, ${(bigint >> 8) & 255}, ${bigint & 255}`;
+        }
+
         function updateButtons() {
             const playing = !player.paused;
             list.querySelectorAll('.track-link').forEach((btn, i) => {
@@ -373,7 +385,7 @@
                 } else {
                     btn.removeAttribute('aria-current');
                 }
-                btn.querySelector('.play-icon').classList.toggle('is-playing', isActive && playing);
+                btn.querySelector('.play-indicator').classList.toggle('is-playing', isActive && playing);
                 btn.setAttribute('aria-label', `${isActive && playing ? 'Pause' : 'Play'} ${title}`);
             });
         }
@@ -399,6 +411,11 @@
 
             titleEl.textContent = track.title;
             document.title = `Soul Spa - ${track.title}`;
+            
+            // Dynamically update the global colors for Glow and UI Accents
+            document.documentElement.style.setProperty('--accent', track.color);
+            document.documentElement.style.setProperty('--glow-rgb', hexToRgb(track.color));
+            
             errorEl.hidden = true;
             source.src = track.file;
             player.load();
@@ -433,14 +450,30 @@
                 btn.type = 'button';
                 btn.className = 'track-link';
 
-                const icon = document.createElement('span');
-                icon.className = 'play-icon';
-                icon.setAttribute('aria-hidden', 'true');
+                // Left wrapper for Symbol and Title
+                const leftContent = document.createElement('div');
+                leftContent.className = 'track-left-content';
+
+                const symbol = document.createElement('div');
+                symbol.className = 'track-symbol';
+                symbol.style.color = track.color;
+                // Add a very soft tinted background to the circle symbol
+                symbol.style.backgroundColor = `rgba(${hexToRgb(track.color)}, 0.15)`;
+                symbol.innerHTML = track.icon;
 
                 const label = document.createElement('span');
+                label.className = 'track-title-text';
                 label.textContent = track.title;
 
-                btn.append(icon, label);
+                leftContent.append(symbol, label);
+
+                // Right Play/Pause Indicator
+                const playIndicator = document.createElement('span');
+                playIndicator.className = 'play-indicator';
+                playIndicator.setAttribute('aria-hidden', 'true');
+
+                btn.append(leftContent, playIndicator);
+                
                 btn.addEventListener('click', () => {
                     if (index === currentIndex) {
                         if (player.paused) player.play().catch(() => {});
@@ -455,7 +488,6 @@
             });
         }
 
-        // The error event fires on the <source> element, not the <audio> element.
         source.addEventListener('error', () => { errorEl.hidden = false; });
         player.addEventListener('play', updateButtons);
         player.addEventListener('pause', updateButtons);
@@ -466,9 +498,7 @@
             try {
                 navigator.mediaSession.setActionHandler('previoustrack', () => step(-1));
                 navigator.mediaSession.setActionHandler('nexttrack', () => step(1));
-            } catch (e) {
-                // Some browsers don't support these actions.
-            }
+            } catch (e) { }
         }
 
         const requested = new URLSearchParams(location.search).get('track');
