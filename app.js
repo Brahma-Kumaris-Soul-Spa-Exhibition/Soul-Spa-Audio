@@ -2,14 +2,14 @@
 
 const svgWrapper = (path) => `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
 
-// color = brand colour (tile + glow). fg = icon colour on the tile (white, dark on yellow for contrast).
+// color = brand colour (tile + glow). fg = icon colour on the tile (white).
 const tracks = [
     // Power: red, solid sun with 12 rays
     { id: 'power', title: 'Power', file: 'power.mp3', color: '#BA2025', fg: '#fff', transcript: '', icon: svgWrapper('<circle cx="12" cy="12" r="5" fill="currentColor" stroke="none"></circle><path d="M12.00 4.00L12.00 1.40M16.00 5.07L17.30 2.82M18.93 8.00L21.18 6.70M20.00 12.00L22.60 12.00M18.93 16.00L21.18 17.30M16.00 18.93L17.30 21.18M12.00 20.00L12.00 22.60M8.00 18.93L6.70 21.18M5.07 16.00L2.82 17.30M4.00 12.00L1.40 12.00M5.07 8.00L2.82 6.70M8.00 5.07L6.70 2.82" stroke-width="2"></path>') },
     // Purity: orange, solid drop with crescent highlight
     { id: 'purity', title: 'Purity', file: 'purity.mp3', color: '#E06221', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor" stroke="none"></path><path d="M8 13.2A5.2 5.2 0 0 0 11.8 18.6 4 4 0 0 1 8 13.2z" fill="#E06221" stroke="none"></path>') },
     // Happiness: yellow, solid star
-    { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#F8B617', fg: '#fff', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#ffffff" stroke="ffffff"></polygon>') },
+    { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#F8B617', fg: '#fff', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none"></polygon>') },
     // Love: green, heart outline
     { id: 'love', title: 'Love', file: 'love.mp3', color: '#006E3A', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="3"></path>') },
     // Peace: blue, three waves
@@ -112,9 +112,11 @@ function buildPlaylist() {
 
         const symbol = document.createElement('div');
         symbol.className = 'track-symbol';
-        symbol.style.setProperty('--ink-light', track.fg);
-            symbol.style.setProperty('--ink-dark', track.fg);
-            symbol.style.setProperty('--tint', track.color);
+        
+        // This is the crucial fix! Applying the color property directly 
+        // forces the SVGs to inherit white, ignoring dark mode CSS overrides.
+        symbol.style.color = track.fg;
+        symbol.style.setProperty('--tint', track.color);
         symbol.innerHTML = track.icon; // hardcoded constants only
 
         const label = document.createElement('span');
