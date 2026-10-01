@@ -1,5 +1,8 @@
 'use strict';
 
+// Bump this number whenever you replace the artwork images, so phones fetch the new ones.
+const ASSET_VERSION = '2';
+
 const svgWrapper = (path) => `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
 
 // color = brand colour (tile + glow). fg = icon colour on the tile (white).
@@ -87,7 +90,7 @@ function loadTrack(index, autoplay = false) {
             title: track.title,
             artist: 'Brahma Kumaris UK',
             album: 'Soul Spa Guided Meditations',
-            artwork: [{ src: `art-${track.id}.png`, sizes: '512x512', type: 'image/png' }]
+            artwork: [{ src: `art-${track.id}.png?v=${ASSET_VERSION}`, sizes: '512x512', type: 'image/png' }]
         });
     }
 
