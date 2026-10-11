@@ -52,16 +52,48 @@ function updateButtons() {
     });
 }
 
-function renderTranscript(text) {
+// ---- Captions + transcript (data lives in captions.js) ----
+const capToggle = document.getElementById('captions-toggle');
+const capBox = document.getElementById('captions');
+const DATA = window.SOULSPA || {};
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let capsOn = false, cues = [], paras = [], lastCue = -2, lastPara = -2;
+
+function renderTranscript(track) {
     transcriptBody.replaceChildren();
-    if (!text) { transcriptEl.hidden = true; return; }
-    text.split(/\n\s*\n/).forEach(para => {
-        const p = document.createElement('p');
-        p.textContent = para.trim();
-        transcriptBody.appendChild(p);
+    const d = DATA[track.id];
+    paras = d ? d.paragraphs : [];
+    paras.forEach(p => {
+        const el = document.createElement(p.heading ? 'h3' : 'p');
+        el.textContent = p.text;
+        transcriptBody.appendChild(el);
     });
     transcriptEl.open = false;
-    transcriptEl.hidden = false;
+    transcriptEl.hidden = !paras.length;
+}
+
+function setupCaptions(track) {
+    const d = DATA[track.id];
+    cues = d ? d.cues : [];
+    lastCue = lastPara = -2;
+    capBox.textContent = '';
+    capToggle.hidden = !cues.length;
+    capBox.hidden = !(capsOn && cues.length);
+    capToggle.setAttribute('aria-pressed', String(capsOn));
+}
+
+function syncText() {
+    const t = player.currentTime;
+    const c = cues.findIndex(q => t >= q[0] && t < q[1]);
+    if (c !== lastCue) { lastCue = c; capBox.textContent = c >= 0 ? cues[c][2] : ''; }
+    let k = -1;
+    paras.forEach((p, n) => { if (t >= p.t) k = n; });
+    if (k !== lastPara) {
+        lastPara = k;
+        [...transcriptBody.children].forEach((el, n) => el.classList.toggle('current', n === k));
+        const el = transcriptBody.children[k];
+        if (el && transcriptEl.open) el.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
 }
 
 function loadTrack(index, autoplay = false) {
@@ -82,7 +114,8 @@ function loadTrack(index, autoplay = false) {
     player.load();
     if (autoplay) player.play().catch(() => {});
 
-    renderTranscript(track.transcript);
+    renderTranscript(track);
+    setupCaptions(track);
     updateButtons();
 
     if ('mediaSession' in navigator) {
@@ -116,8 +149,8 @@ function buildPlaylist() {
         const symbol = document.createElement('div');
         symbol.className = 'track-symbol';
         symbol.style.setProperty('--ink-light', track.fg);
-            symbol.style.setProperty('--ink-dark', track.fg);
-            symbol.style.setProperty('--tint', track.color);
+        symbol.style.setProperty('--ink-dark', track.fg);
+        symbol.style.setProperty('--tint', track.color);
         symbol.innerHTML = track.icon; // hardcoded constants only
 
         const label = document.createElement('span');
@@ -151,6 +184,14 @@ player.addEventListener('error', showError);   // mid-playback network/decode fa
 player.addEventListener('play', updateButtons);
 player.addEventListener('pause', updateButtons);
 player.addEventListener('ended', updateButtons);
+player.addEventListener('timeupdate', syncText);
+player.addEventListener('seeked', syncText);
+capToggle.addEventListener('click', () => {
+    capsOn = !capsOn;
+    capToggle.setAttribute('aria-pressed', String(capsOn));
+    capBox.hidden = !(capsOn && cues.length);
+    lastCue = -2; syncText();
+});
 
 // Logo: handle failures that happened before this script ran
 if (logo.complete && logo.naturalWidth === 0) logo.hidden = true;

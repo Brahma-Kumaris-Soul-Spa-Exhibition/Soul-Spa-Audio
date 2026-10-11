@@ -149,3 +149,17 @@ audio { width: 100%; margin: 0; display: block; outline: none; border: none; bac
 @media (prefers-reduced-motion: reduce) {
     :root, .track-link, .play-indicator { transition: none; }
 }
+
+/* Captions button + live caption box */
+.captions-toggle { margin: 14px auto 0; display: block; font: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px; min-height: 44px; border-radius: 22px; cursor: pointer; color: var(--text-main); background: transparent; border: 1.5px solid var(--text-muted); }
+.captions-toggle[aria-pressed="true"] { background: var(--text-main); color: var(--accent-contrast); border-color: var(--text-main); }
+.captions-toggle:focus-visible { outline: 2px solid var(--text-main); outline-offset: 2px; }
+.captions { margin: 12px 0 0; padding: 12px 14px; min-height: 5.4em; background: var(--hover-bg); border-radius: 12px; font-size: 17px; line-height: 1.5; text-align: center; color: var(--text-main); }
+
+/* Transcript layout */
+#transcript-body { font-size: 15px; line-height: 1.7; }
+#transcript-body h3 { margin: 0 0 8px; padding-left: 13px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+#transcript-body p { margin: 0 0 6px; padding: 6px 10px; border-left: 3px solid transparent; border-radius: 6px; transition: background-color 0.3s ease; }
+#transcript-body .current { border-left-color: var(--accent); background-color: var(--highlight); }
+@media (forced-colors: active) { #transcript-body .current { border-left-color: Highlight; } }
+.captions-toggle[hidden], .captions[hidden] { display: none; }
