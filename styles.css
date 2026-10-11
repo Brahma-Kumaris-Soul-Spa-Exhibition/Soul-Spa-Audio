@@ -45,9 +45,17 @@ body {
     min-height: 100vh;
     min-height: 100dvh;
     background-color: transparent;
+}
+
+/* Ambient glow. A fixed pseudo-element instead of background-attachment: fixed, which iOS Safari renders badly. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background-image: radial-gradient(circle at 50% 0%, rgb(var(--glow-r) var(--glow-g) var(--glow-b) / var(--glow-alpha)) 0%, transparent 70%);
     background-repeat: no-repeat;
-    background-attachment: fixed;
 }
 
 .player-card { padding: 20px 15px; width: 100%; max-width: 420px; display: flex; flex-direction: column; }
@@ -121,8 +129,9 @@ audio { width: 100%; margin: 0; display: block; outline: none; border: none; bac
 .more-links { margin-top: 24px; padding-left: 14px; text-align: left; font-size: 14px; line-height: 1.5; color: var(--text-muted); } /* 14px lines up with the track symbols */
 .more-links p { margin: 0; }
 .more-links p + p { margin-top: 2px; }
-.more-links a { display: inline-block; padding: 5px 0; color: var(--text-main); font-weight: 600; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
-.more-links a:hover { text-decoration-thickness: 2.5px; }
+.more-links a { display: inline-block; padding: 5px 0; color: var(--text-main); font-weight: 500; text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: rgba(128, 128, 128, 0.6); text-underline-offset: 4px; transition: text-decoration-color 0.2s ease; }
+.more-links a::after { content: "\2197"; content: "\2197" / ""; display: inline-block; margin-left: 4px; font-size: 0.85em; font-weight: 400; } /* small arrow = opens elsewhere */
+.more-links a:hover { text-decoration-color: currentColor; }
 .more-links a:focus-visible { outline: 2px solid var(--text-main); outline-offset: 2px; border-radius: 3px; }
 
 .privacy-footer { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--highlight); font-size: 12px; color: var(--text-muted); text-align: center; line-height: 1.5; }
