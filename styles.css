@@ -74,20 +74,9 @@ audio { width: 100%; margin: 0; display: block; outline: none; border: none; bac
 
 #audio-error { color: var(--error); font-size: 14px; margin: 10px 0 0; }
 
-#transcript {
-    margin-top: 15px; text-align: left; background: var(--hover-bg);
-    padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent);
-    font-size: 14px; line-height: 1.6;
-}
-#transcript summary { cursor: pointer; font-weight: 600; color: var(--text-main); }
-
-#transcript summary:focus-visible,
 .privacy-footer a:focus-visible,
 .track-link:focus-visible { outline: 2px solid var(--text-main); outline-offset: 2px; }
 
-#transcript-body { margin-top: 10px; }
-#transcript-body p { margin-top: 0; margin-bottom: 12px; }
-#transcript-body p:last-child { margin-bottom: 0; }
 
 .playlist-section { display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0; }
 
@@ -156,10 +145,4 @@ audio { width: 100%; margin: 0; display: block; outline: none; border: none; bac
 .captions-toggle:focus-visible { outline: 2px solid var(--text-main); outline-offset: 2px; }
 .captions { margin: 12px 0 0; padding: 12px 14px; min-height: 5.4em; background: var(--hover-bg); border-radius: 12px; font-size: 17px; line-height: 1.5; text-align: center; color: var(--text-main); }
 
-/* Transcript layout */
-#transcript-body { font-size: 15px; line-height: 1.7; }
-#transcript-body h3 { margin: 0 0 8px; padding-left: 13px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
-#transcript-body p { margin: 0 0 6px; padding: 6px 10px; border-left: 3px solid transparent; border-radius: 6px; transition: background-color 0.3s ease; }
-#transcript-body .current { border-left-color: var(--accent); background-color: var(--highlight); }
-@media (forced-colors: active) { #transcript-body .current { border-left-color: Highlight; } }
 .captions-toggle[hidden], .captions[hidden] { display: none; }

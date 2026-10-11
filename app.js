@@ -8,19 +8,19 @@ const svgWrapper = (path) => `<svg xmlns="http://www.w3.org/2000/svg" width="22"
 // color = brand colour (tile + glow). fg = icon colour on the tile (white).
 const tracks = [
     // Power: red, solid sun with 12 rays
-    { id: 'power', title: 'Power', file: 'power.mp3', color: '#BA2025', fg: '#fff', transcript: '', icon: svgWrapper('<circle cx="12" cy="12" r="5" fill="currentColor" stroke="none"></circle><path d="M12.00 4.00L12.00 1.40M16.00 5.07L17.30 2.82M18.93 8.00L21.18 6.70M20.00 12.00L22.60 12.00M18.93 16.00L21.18 17.30M16.00 18.93L17.30 21.18M12.00 20.00L12.00 22.60M8.00 18.93L6.70 21.18M5.07 16.00L2.82 17.30M4.00 12.00L1.40 12.00M5.07 8.00L2.82 6.70M8.00 5.07L6.70 2.82" stroke-width="2"></path>') },
+    { id: 'power', title: 'Power', file: 'power.mp3', color: '#BA2025', fg: '#fff', icon: svgWrapper('<circle cx="12" cy="12" r="5" fill="currentColor" stroke="none"></circle><path d="M12.00 4.00L12.00 1.40M16.00 5.07L17.30 2.82M18.93 8.00L21.18 6.70M20.00 12.00L22.60 12.00M18.93 16.00L21.18 17.30M16.00 18.93L17.30 21.18M12.00 20.00L12.00 22.60M8.00 18.93L6.70 21.18M5.07 16.00L2.82 17.30M4.00 12.00L1.40 12.00M5.07 8.00L2.82 6.70M8.00 5.07L6.70 2.82" stroke-width="2"></path>') },
     // Purity: orange, solid drop with crescent highlight
-    { id: 'purity', title: 'Purity', file: 'purity.mp3', color: '#E06221', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor" stroke="none"></path><path d="M7.6 12.6A5.6 5.6 0 0 0 12 19.3 9 9 0 0 1 7.6 12.6z" fill="#E06221" stroke="none"></path>') },
+    { id: 'purity', title: 'Purity', file: 'purity.mp3', color: '#E06221', fg: '#fff', icon: svgWrapper('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="currentColor" stroke="none"></path><path d="M7.6 12.6A5.6 5.6 0 0 0 12 19.3 9 9 0 0 1 7.6 12.6z" fill="#E06221" stroke="none"></path>') },
     // Happiness: yellow, solid star
-    { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#F8B617', fg: '#fff', transcript: '', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none"></polygon>') },
+    { id: 'happiness', title: 'Happiness', file: 'happiness.mp3', color: '#F8B617', fg: '#fff', icon: svgWrapper('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none"></polygon>') },
     // Love: green, heart outline
-    { id: 'love', title: 'Love', file: 'love.mp3', color: '#006E3A', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="3"></path>') },
+    { id: 'love', title: 'Love', file: 'love.mp3', color: '#006E3A', fg: '#fff', icon: svgWrapper('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="3"></path>') },
     // Peace: blue, three waves
-    { id: 'peace', title: 'Peace', file: 'peace.mp3', color: '#0075BE', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M3 6.5q2-1.8 4 0t4 0 4 0 4 0M3 12q2-1.8 4 0t4 0 4 0 4 0M3 17.5q2-1.8 4 0t4 0 4 0 4 0" stroke-width="2"></path>') },
+    { id: 'peace', title: 'Peace', file: 'peace.mp3', color: '#0075BE', fg: '#fff', icon: svgWrapper('<path d="M3 6.5q2-1.8 4 0t4 0 4 0 4 0M3 12q2-1.8 4 0t4 0 4 0 4 0M3 17.5q2-1.8 4 0t4 0 4 0 4 0" stroke-width="2"></path>') },
     // Knowledge: indigo, light bulb with rays
-    { id: 'knowledge', title: 'Knowledge', file: 'knowledge.mp3', color: '#27387A', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M9.2 17.5C9.2 15 6.8 14 6.8 10.5a5.2 5.2 0 0 1 10.4 0c0 3.5-2.4 4.5-2.4 7zM9.5 21h5M12 1v1.8M3.6 4.6l1.3 1.3M20.4 4.6l-1.3 1.3M1.5 10.5h1.8M20.7 10.5h1.8" stroke-width="2"></path>') },
+    { id: 'knowledge', title: 'Knowledge', file: 'knowledge.mp3', color: '#27387A', fg: '#fff', icon: svgWrapper('<path d="M9.2 17.5C9.2 15 6.8 14 6.8 10.5a5.2 5.2 0 0 1 10.4 0c0 3.5-2.4 4.5-2.4 7zM9.5 21h5M12 1v1.8M3.6 4.6l1.3 1.3M20.4 4.6l-1.3 1.3M1.5 10.5h1.8M20.7 10.5h1.8" stroke-width="2"></path>') },
     // Bliss: purple, lotus
-    { id: 'bliss', title: 'Bliss', file: 'bliss.mp3', color: '#652A80', fg: '#fff', transcript: '', icon: svgWrapper('<path d="M12 5c-2.2 2.4-3 4.8-3 7.2 0 2 1.2 3.4 3 3.8 1.8-.4 3-1.8 3-3.8 0-2.4-.8-4.8-3-7.2zM9 12.5C6.5 11.5 4.5 9.5 3 7.5 2.7 11.5 4.8 15.4 9 16.3M15 12.5c2.5-1 4.5-3 6-5 .3 4-1.8 7.9-6 8.8M3 15.5c1.8 3 5 4.8 9 4.8s7.2-1.8 9-4.8" stroke-width="2"></path>') }
+    { id: 'bliss', title: 'Bliss', file: 'bliss.mp3', color: '#652A80', fg: '#fff', icon: svgWrapper('<path d="M12 5c-2.2 2.4-3 4.8-3 7.2 0 2 1.2 3.4 3 3.8 1.8-.4 3-1.8 3-3.8 0-2.4-.8-4.8-3-7.2zM9 12.5C6.5 11.5 4.5 9.5 3 7.5 2.7 11.5 4.8 15.4 9 16.3M15 12.5c2.5-1 4.5-3 6-5 .3 4-1.8 7.9-6 8.8M3 15.5c1.8 3 5 4.8 9 4.8s7.2-1.8 9-4.8" stroke-width="2"></path>') }
 ];
 
 const player = document.getElementById('audio-player');
@@ -28,8 +28,6 @@ const source = document.getElementById('audio-source');
 const titleEl = document.getElementById('current-title');
 const list = document.getElementById('playlist-container');
 const errorEl = document.getElementById('audio-error');
-const transcriptEl = document.getElementById('transcript');
-const transcriptBody = document.getElementById('transcript-body');
 const logo = document.getElementById('org-logo');
 const root = document.documentElement;
 
@@ -52,30 +50,16 @@ function updateButtons() {
     });
 }
 
-// ---- Captions + transcript (data lives in captions.js) ----
+// ---- Captions (data lives in captions.js) ----
 const capToggle = document.getElementById('captions-toggle');
 const capBox = document.getElementById('captions');
 const DATA = window.SOULSPA || {};
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let capsOn = false, cues = [], paras = [], lastCue = -2, lastPara = -2;
-
-function renderTranscript(track) {
-    transcriptBody.replaceChildren();
-    const d = DATA[track.id];
-    paras = d ? d.paragraphs : [];
-    paras.forEach(p => {
-        const el = document.createElement(p.heading ? 'h3' : 'p');
-        el.textContent = p.text;
-        transcriptBody.appendChild(el);
-    });
-    transcriptEl.open = false;
-    transcriptEl.hidden = !paras.length;
-}
+let capsOn = false, cues = [], lastCue = -2;
 
 function setupCaptions(track) {
     const d = DATA[track.id];
     cues = d ? d.cues : [];
-    lastCue = lastPara = -2;
+    lastCue = -2;
     capBox.textContent = '';
     capToggle.hidden = !cues.length;
     capBox.hidden = !(capsOn && cues.length);
@@ -86,14 +70,6 @@ function syncText() {
     const t = player.currentTime;
     const c = cues.findIndex(q => t >= q[0] && t < q[1]);
     if (c !== lastCue) { lastCue = c; capBox.textContent = c >= 0 ? cues[c][2] : ''; }
-    let k = -1;
-    paras.forEach((p, n) => { if (t >= p.t) k = n; });
-    if (k !== lastPara) {
-        lastPara = k;
-        [...transcriptBody.children].forEach((el, n) => el.classList.toggle('current', n === k));
-        const el = transcriptBody.children[k];
-        if (el && transcriptEl.open) el.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
-    }
 }
 
 function loadTrack(index, autoplay = false) {
@@ -114,7 +90,6 @@ function loadTrack(index, autoplay = false) {
     player.load();
     if (autoplay) player.play().catch(() => {});
 
-    renderTranscript(track);
     setupCaptions(track);
     updateButtons();
 
