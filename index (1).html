@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <meta name="referrer" content="no-referrer">
+    <meta name="color-scheme" content="light dark">
+
+    <!-- CSP: only same-origin files. No inline code, so styles.css and app.js can be edited freely. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; media-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
+
+    <title>Soul Spa Guided Meditations</title>
+
+    <link rel="stylesheet" href="styles.css?v=6">
+</head>
+<body>
+    <noscript><p class="noscript">Please enable JavaScript to use the audio guide.</p></noscript>
+
+    <main class="player-card">
+        <section class="now-playing-section" aria-labelledby="current-title">
+            <img src="bk-logo.jpg" alt="Brahma Kumaris UK" class="org-logo" id="org-logo" width="190" height="80">
+
+            <h1 class="page-title">Soul Spa Guided Meditations</h1>
+            <h2 class="track-title" id="current-title" aria-live="polite">Loading...</h2>
+
+            <audio id="audio-player" controls controlsList="nodownload" preload="metadata">
+                <source id="audio-source" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p class="safety-note">Please don't listen while driving or operating machinery.</p>
+
+            <p id="audio-error" role="alert" hidden>Sorry, this audio track could not be loaded. Please check your connection and try again.</p>
+
+            <details id="transcript" hidden>
+                <summary>Read transcript</summary>
+                <div id="transcript-body"></div>
+            </details>
+        </section>
+
+        <section aria-label="Meditations">
+            <ul class="playlist-section" id="playlist-container" role="list"></ul>
+        </section>
+
+        <nav class="more-links" aria-label="More resources">
+            <p><a href="https://www.youtube.com/playlist?list=PLLq9bWK3m2Do" target="_blank" rel="noopener noreferrer">Soul Spa Visualisations<span class="visually-hidden"> (opens in a new tab)</span></a> on YouTube</p>
+            <p><a href="https://brahmakumaris.uk" target="_blank" rel="noopener noreferrer">brahmakumaris.uk<span class="visually-hidden"> (opens in a new tab)</span></a> for free courses and resources</p>
+        </nav>
+
+        <footer class="privacy-footer">
+            <p>This guide uses no cookies or analytics and collects no personal information itself. Its host, GitHub, may process technical data such as your IP address. See our
+                <a href="https://brahmakumaris.uk/privacy-policy/" target="_blank" rel="noopener noreferrer">privacy notice<span class="visually-hidden"> (opens in a new tab)</span></a> and
+                <a href="https://brahmakumaris.uk/terms-of-use" target="_blank" rel="noopener noreferrer">terms of use<span class="visually-hidden"> (opens in a new tab)</span></a>.</p>
+
+            <p class="charity-details">
+                Brahma Kumaris, UK is a registered Charity in England &amp; Wales (269971) and Scotland&nbsp;(SC040512)<br>
+                Registered Office: 65-69 Pound Lane, London NW10 2HH
+            </p>
+        </footer>
+    </main>
+
+    <script src="app.js?v=2"></script>
+</body>
+</html>
