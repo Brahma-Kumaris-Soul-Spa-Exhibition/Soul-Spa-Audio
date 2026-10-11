@@ -38,3 +38,44 @@ window.SOULSPA.power = {
     [431.36, 447.6, "Remain beside the fire, warm, strong, centred, absorbing the deep red energy of power."]
   ]
 };
+
+window.SOULSPA.purity = {
+  cues: [
+    [2.72, 6.48, "Orange: Purity"],
+    [6.48, 8.36, "The Sunset"],
+    [8.36, 21.52, "Virtues: Purity, clean intentions, honesty, simplicity, clarity, innocence."],
+    [23.52, 43.6, "Take a slow, deep breath in, and gently breathe out. Again, breathe in, and slowly release."],
+    [43.6, 56.56, "Allow your body to soften. Relax your legs, your stomach, your back,"],
+    [56.56, 76.32, "your shoulders, your arms, your hands, your neck, and face. Allow the breath to settle."],
+    [76.32, 86.72, "Now gently bring your awareness inward. Become aware of the subtle energy within"],
+    [86.72, 99.6, "you. Bring your attention to the centre of your forehead. Imagine yourself as a"],
+    [99.6, 116.16, "tiny point of living light. A point of consciousness. This is you, the soul."],
+    [116.16, 132.96, "Imagine this light beginning to glow a beautiful orange. Warm, clear, radiant, pure. Now imagine"],
+    [132.96, 144.72, "yourself sitting in a chair on the veranda of a house on the top of a cliff, overlooking the sea."],
+    [145.52, 162.88, "It is late August, about 7:30 in the evening, and the sun will soon set. As you look out to sea,"],
+    [162.88, 176.24, "allow yourself to reflect on the events of today. You recall the joy of recently meeting friends you"],
+    [176.24, 186.8, "had not seen for a long time. Remember how much fun and laughter you shared together."],
+    [186.8, 198.16, "Remember their smiling faces, the happiness of being together, the warmth of friendship."],
+    [199.76, 211.84, "In your hand is a cool, refreshing drink. Take a sip. Feel its coolness,"],
+    [211.84, 223.92, "and then once again look into the distance. The sun is about to set beyond the horizon."],
+    [225.2, 238.48, "A giant orange disk in the sky moves slowly and silently towards the sea. Watch it. The"],
+    [238.48, 249.68, "sky becomes filled with beautiful shades of orange, gold, amber, warm light."],
+    [250.96, 265.52, "Orange carries the quality of purity. Purity is a clean energy, a clear intention, an honest heart,"],
+    [265.52, 281.6, "a simplicity in the way I think and feel. Look at the orange sun. Its light is clear and radiant."],
+    [281.6, 294.08, "Allow that light to illuminate your consciousness. Purity begins in thought. When thoughts come from"],
+    [294.08, 305.6, "a clean intention, they carry a different energy. When words come from honesty, they create clarity."],
+    [307.04, 314.8, "When actions come from a pure heart, they create trust."],
+    [314.8, 324.96, "Feel the orange point of light in the centre of your forehead becoming brighter. Allow your"],
+    [324.96, 340.0, "thoughts to become simple, clear, elevated. There is a beautiful innocence in purity,"],
+    [340.0, 353.92, "an openness, a sincerity, a willingness to see goodness. Think about your friends,"],
+    [353.92, 365.84, "their smiling faces, the laugh, the simple joy of being together. There is purity in genuine"],
+    [365.84, 380.48, "friendship. In a sincere smile, in giving without calculation, in wishing well for another person."],
+    [380.48, 391.52, "Look again towards the horizon. The orange sun moves slowly lower. Its light spreads across"],
+    [391.52, 403.12, "the surface of the sea. Allow the orange light to spread through your consciousness. I am a"],
+    [403.12, 418.72, "pure soul. My intentions are clean. My heart is sincere. My thoughts are clear. My words carry"],
+    [418.72, 436.88, "honesty. My actions reflect what I value. Purity creates lightness. Purity brings clarity. Purity"],
+    [436.88, 448.16, "allows me to meet life with an open heart and a clear mind. Take another imaginary sip of your"],
+    [448.16, 461.44, "cool drink. Feel the evening air. Look across the sea. Watch the giant orange sun continuing its"],
+    [461.44, 472.48, "journey towards the horizon, and allow yourself to remain in the warm, clear energy of purity."]
+  ]
+};
