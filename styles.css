@@ -118,6 +118,13 @@ audio { width: 100%; margin: 0; display: block; outline: none; border: none; bac
 .track-link.active .track-title-text { font-weight: 700; }
 .track-link.active .play-indicator { opacity: 1; background-color: var(--text-main); color: var(--accent-contrast); }
 
+.more-links { margin-top: 22px; text-align: center; font-size: 14px; line-height: 1.6; color: var(--text-muted); }
+.more-links p { margin: 0; }
+.more-links p + p { margin-top: 6px; }
+.more-links a { color: var(--text-main); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 6px 2px; border-radius: 4px; }
+.more-links a:hover { background-color: var(--hover-bg); }
+.more-links a:focus-visible { outline: 2px solid var(--text-main); outline-offset: 2px; }
+
 .privacy-footer { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--highlight); font-size: 12px; color: var(--text-muted); text-align: center; line-height: 1.5; }
 .privacy-footer p { margin: 0; }
 .privacy-footer a { color: var(--text-main); text-decoration: underline; }
