@@ -79,3 +79,43 @@ window.SOULSPA.purity = {
     [461.44, 472.48, "journey towards the horizon, and allow yourself to remain in the warm, clear energy of purity."]
   ]
 };
+
+window.SOULSPA.happiness = {
+  cues: [
+    [1.76, 5.44, "Yellow: Happiness"],
+    [5.44, 7.24, "The Sunflowers"],
+    [7.24, 18.96, "Virtues: Happiness, joy, appreciation, positivity, lightness."],
+    [18.96, 25.76, "Begin with a slow, deep breath in,"],
+    [25.76, 42.0, "and gently breathe out. Again, breathe in, and slowly release."],
+    [42.0, 61.92, "Feel your body relaxing. Relax your feet and legs, your stomach, your back, your shoulders,"],
+    [63.04, 82.96, "your arms and hands. Soften your neck and face. Allow your breathing to become easy and natural."],
+    [82.96, 92.08, "Now gently bring your awareness inward. Become aware of the subtle"],
+    [92.08, 105.12, "energy within. Bring your attention to the centre of your forehead. Imagine a"],
+    [105.12, 116.88, "tiny point of living light. A point of consciousness. This is you, the soul."],
+    [116.88, 128.16, "Imagine this point of consciousness glowing with a beautiful golden yellow light. Bright,"],
+    [128.16, 141.84, "warm, joyful, light. Now imagine yourself walking through a field of tall sunflowers on a bright"],
+    [141.84, 143.6, "summer's day. The sky above is a clear, brilliant blue. The sun is shining brightly. The sunflowers"],
+    [143.6, 164.08, "stretch as far as the eye can see, their large, round faces turned towards the light."],
+    [165.6, 169.69, "The air is warm and filled with the gentle hum of bees. You feel a sense"],
+    [169.69, 171.2, "of lightness and joy simply by being here. The bright yellow colour of the sunflowers"],
+    [228.4, 247.12, "seems to radiate a cheerful, positive energy."],
+    [251.92, 260.4, "Yellow carries the quality of happiness. Happiness is an inner"],
+    [260.4, 268.16, "lightness, a joyful state of being, a natural positivity. Allow the golden yellow light in"],
+    [268.16, 307.04, "the centre of your forehead to become brighter. Let this light fill your mind, sweeping away"],
+    [318.64, 348.64, "any heaviness or worry. Feel your thoughts becoming lighter, more positive."],
+    [348.64, 368.92, "Happiness is a choice. It is the ability to see the good, to appreciate the simple things,"],
+    [368.92, 369.2, "to find joy in the present moment. Think of a time when you felt truly happy. Remember the lightness"],
+    [369.2, 369.92, "in your heart, the smile on your face, the feeling of ease. Allow that feeling to resurface now."],
+    [372.8, 375.12, "Look closely at one of the sunflowers. See its bright"],
+    [375.12, 375.87, "yellow petals, its dark centre. It stands tall and proud, turning its face towards the sun,"],
+    [375.87, 377.04, "absorbing the light and warmth. We, too, can choose to turn our faces towards the"],
+    [377.04, 379.52, "light. We can choose to focus on the positive, on what is good, on what brings us joy."],
+    [379.52, 386.36, "Feel the golden yellow energy spreading through your entire being. Feel it in your chest,"],
+    [386.36, 399.04, "your arms, your legs. You are filled with a radiant, joyful energy. I am a happy soul."],
+    [399.68, 404.48, "Happiness is my natural state. I choose to see the good. I appreciate"],
+    [411.04, 418.72, "the simple joys of life. My positivity radiates outward, bringing light to others."],
+    [424.0, 429.68, "Continue walking through the field of sunflowers, feeling the"],
+    [430.32, 433.68, "warmth of the sun and the joyful energy of the bright yellow flowers. Allow yourself to"],
+    [433.68, 437.06, "remain in this state of light, happy awareness."]
+  ]
+};
