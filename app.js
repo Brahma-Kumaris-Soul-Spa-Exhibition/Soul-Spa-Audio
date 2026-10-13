@@ -54,6 +54,17 @@ function updateButtons() {
 const capToggle = document.getElementById('captions-toggle');
 const capBox = document.getElementById('captions');
 const DATA = window.SOULSPA || {};
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let bloomTimer = null;
+
+// Colour bloom: a gentle wash of the track colour for the first seconds, while the colour is named.
+function bloom() {
+    if (reduceMotion) return;
+    root.classList.add('bloom');
+    clearTimeout(bloomTimer);
+    bloomTimer = setTimeout(() => root.classList.remove('bloom'), 12000);
+}
+
 let capsOn = false, cues = [], lastCue = -2;
 
 function setupCaptions(track) {
@@ -159,6 +170,7 @@ player.addEventListener('error', showError);   // mid-playback network/decode fa
 player.addEventListener('play', updateButtons);
 player.addEventListener('pause', updateButtons);
 player.addEventListener('ended', updateButtons);
+player.addEventListener('play', () => { if (player.currentTime < 3) bloom(); });
 player.addEventListener('timeupdate', syncText);
 player.addEventListener('seeked', syncText);
 capToggle.addEventListener('click', () => {

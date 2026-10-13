@@ -2,11 +2,13 @@
 @property --glow-r { syntax: '<number>'; inherits: true; initial-value: 74; }
 @property --glow-g { syntax: '<number>'; inherits: true; initial-value: 85; }
 @property --glow-b { syntax: '<number>'; inherits: true; initial-value: 104; }
+@property --glow-alpha { syntax: '<number>'; inherits: true; initial-value: 0.15; }
+@property --glow-size { syntax: '<percentage>'; inherits: true; initial-value: 70%; }
 
 :root {
     color-scheme: light dark;
     --text-main: #2d3748;   /* 10.6:1 on white */
-    --text-muted: #4a5568;  /* 7.5:1 on white */
+    --text-muted: #3f4859;  /* 9.5:1 on white; dark enough to stay >= 4.5:1 under the colour bloom */
     --accent-contrast: #fff;
     --error: #c53030;       /* 5.5:1 on white */
     --highlight: rgba(0, 0, 0, 0.08);
@@ -14,7 +16,17 @@
     --active-bg: rgba(0, 0, 0, 0.07);
     --accent: #4a5568;      /* decorative only: never used for text */
     --glow-alpha: 0.15;
-    transition: --glow-r 1s ease, --glow-g 1s ease, --glow-b 1s ease;
+    --glow-peak: 0.35;      /* strongest the colour wash gets. Capped so text keeps >= 4.5:1 contrast */
+    --glow-size: 70%;
+    /* Slow fade back to the resting glow */
+    transition: --glow-r 1s ease, --glow-g 1s ease, --glow-b 1s ease, --glow-alpha 6s ease-out, --glow-size 6s ease-out;
+}
+
+/* Colour bloom: added by app.js for the first seconds of a track, while the colour is named */
+:root.bloom {
+    --glow-alpha: var(--glow-peak);
+    --glow-size: 100%;
+    transition: --glow-r 1s ease, --glow-g 1s ease, --glow-b 1s ease, --glow-alpha 1.2s ease-out, --glow-size 2s ease-out;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,6 +39,7 @@
         --hover-bg: rgba(255, 255, 255, 0.08);
         --active-bg: rgba(255, 255, 255, 0.14);
         --glow-alpha: 0.25;
+        --glow-peak: 0.4;
     }
     .org-logo { mix-blend-mode: normal; background: #fff; padding: 8px; border-radius: 8px; }
     .track-symbol { color: var(--ink-dark); }
@@ -54,7 +67,7 @@ body::before {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: radial-gradient(circle at 50% 0%, rgb(var(--glow-r) var(--glow-g) var(--glow-b) / var(--glow-alpha)) 0%, transparent 70%);
+    background-image: radial-gradient(circle at 50% 0%, rgb(var(--glow-r) var(--glow-g) var(--glow-b) / var(--glow-alpha)) 0%, transparent var(--glow-size));
     background-repeat: no-repeat;
 }
 
