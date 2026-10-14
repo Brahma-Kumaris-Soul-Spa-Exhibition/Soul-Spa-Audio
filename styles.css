@@ -156,6 +156,6 @@ audio { width: 100%; margin: 0; display: block; outline: none; border: none; bac
 .captions-toggle { margin: 14px auto 0; display: block; font: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px; min-height: 44px; border-radius: 22px; cursor: pointer; color: var(--text-main); background: transparent; border: 1.5px solid var(--text-muted); }
 .captions-toggle[aria-pressed="true"] { background: var(--text-main); color: var(--accent-contrast); border-color: var(--text-main); }
 .captions-toggle:focus-visible { outline: 2px solid var(--text-main); outline-offset: 2px; }
-.captions { white-space: pre-line; text-wrap: balance; margin: 12px 0 0; padding: 12px 10px; min-height: 5.4em; background: var(--hover-bg); border-radius: 12px; font-size: clamp(15px, 4.4vw, 17px); line-height: 1.45; text-align: center; color: var(--text-main); }
+.captions { white-space: pre-line; margin: 12px 0 0; padding: 12px 14px; min-height: 5.4em; background: var(--hover-bg); border-radius: 12px; font-size: 17px; line-height: 1.5; text-align: center; color: var(--text-main); }
 
 .captions-toggle[hidden], .captions[hidden] { display: none; }
