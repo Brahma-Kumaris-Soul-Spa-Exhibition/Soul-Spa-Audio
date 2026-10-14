@@ -78,7 +78,7 @@ function setupCaptions(track) {
 }
 
 // Show each caption slightly early so it never feels late (display setting only; caption times in captions.js are untouched).
-const CAPTION_LEAD = 0.25; // seconds. Set to 0 for exact SBV timing
+const CAPTION_LEAD = 0; // seconds. 0 = exact SBV timing. A small value (e.g. 0.1) shows captions slightly early
 let rafId = 0;
 
 function tick() {
