@@ -77,9 +77,19 @@ function setupCaptions(track) {
     capToggle.setAttribute('aria-pressed', String(capsOn));
 }
 
+// Show each caption slightly early so it never feels late (display setting only; caption times in captions.js are untouched).
+const CAPTION_LEAD = 0.25; // seconds. Set to 0 for exact SBV timing
+let rafId = 0;
+
+function tick() {
+    syncText();
+    rafId = (!player.paused && !player.ended) ? requestAnimationFrame(tick) : 0;
+}
+
 function syncText() {
+    if (!capsOn) return;
     const t = player.currentTime;
-    const c = cues.findIndex(q => t >= q[0] && t < q[1]);
+    const c = cues.findIndex(q => t + CAPTION_LEAD >= q[0] && t < q[1]);   // lead applies to the start only
     if (c !== lastCue) { lastCue = c; capBox.textContent = c >= 0 ? cues[c][2] : ''; }
 }
 
@@ -170,7 +180,11 @@ player.addEventListener('error', showError);   // mid-playback network/decode fa
 player.addEventListener('play', updateButtons);
 player.addEventListener('pause', updateButtons);
 player.addEventListener('ended', updateButtons);
-player.addEventListener('play', () => { if (player.currentTime < 3) bloom(); });
+player.addEventListener('play', () => {
+    if (player.currentTime < 3) bloom();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(tick);   // smooth sync while playing; timeupdate alone only fires ~4 times a second
+});
 player.addEventListener('timeupdate', syncText);
 player.addEventListener('seeked', syncText);
 capToggle.addEventListener('click', () => {
