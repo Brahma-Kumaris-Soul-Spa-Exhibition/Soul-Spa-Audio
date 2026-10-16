@@ -3,6 +3,9 @@
 // Bump this number whenever you replace the artwork images, so phones fetch the new ones.
 const ASSET_VERSION = '2';
 
+// Bump this number whenever you replace the MP3 files, so phones don't keep playing an old cached copy.
+const AUDIO_VERSION = '3';
+
 const svgWrapper = (path) => `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
 
 // color = brand colour (tile + glow). fg = icon colour on the tile (white).
@@ -109,7 +112,7 @@ function loadTrack(index, autoplay = false) {
     root.style.setProperty('--glow-b', b);
 
     errorEl.hidden = true;
-    source.src = track.file;
+    source.src = `${track.file}?v=${AUDIO_VERSION}`;
     player.load();
     if (autoplay) player.play().catch(() => {});
 
