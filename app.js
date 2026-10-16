@@ -77,10 +77,22 @@ function setupCaptions(track) {
     capToggle.setAttribute('aria-pressed', String(capsOn));
 }
 
+// Caption text for display. Timing is not touched: this only decides where lines break on screen.
+// Line breaks after a sentence or pause are kept; breaks in the middle of a sentence are re-flowed
+// (and balanced by CSS) so lines fill nicely on any screen width.
+// Browsers that can't balance lines (older phones) keep the authored line breaks exactly as in the file.
+const CAN_BALANCE = !!(window.CSS && CSS.supports && CSS.supports('text-wrap', 'balance'));
+
+function displayText(text) {
+    if (!CAN_BALANCE || text.includes(' . ')) return text;          // dotted lists and titles keep their authored layout
+    return text.split('\n').reduce((out, line) =>
+        out === '' ? line : out + (/[.!?…:;]$/.test(out) ? '\n' : ' ') + line, '');
+}
+
 function syncText() {
     const t = player.currentTime;
     const c = cues.findIndex(q => t >= q[0] && t < q[1]);
-    if (c !== lastCue) { lastCue = c; capBox.textContent = c >= 0 ? cues[c][2] : ''; }
+    if (c !== lastCue) { lastCue = c; capBox.textContent = c >= 0 ? displayText(cues[c][2]) : ''; }
 }
 
 function loadTrack(index, autoplay = false) {
