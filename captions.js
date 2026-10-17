@@ -66,7 +66,7 @@ window.SOULSPA.purity = {
   cues: [
     [2.72, 6.48, "ORANGE\nPURITY"],
     [6.48, 9.92, "The Sunset"],
-    [9.92, 21.52, "Purity . Clean . Intentions . Honesty .\nSimplicity . Clarity . Innocence"],
+    [9.92, 21.52, "Purity . Clean Intentions . Honesty .\nSimplicity . Clarity . Innocence"],
     [23.52, 33.52, "Take a slow, deep breath in...\nand gently breathe out."],
     [33.52, 38.56, "Again...\nbreathe in..."],
     [38.56, 48.32, "and slowly release.\nAllow your body to soften."],
